@@ -1,0 +1,71 @@
+<html>
+    <link rel="stylesheet" href="style.css"/>
+ <body>
+    <form>
+<label>Question 1 :</label>        
+<input name='texte1',type="text" , placeholder="Type answer1"/>
+<label>Question 2 :</label> 
+<input name='texte2',type="text" , placeholder="Type answer2"/>
+<label>Question 3 :</label> 
+<input name='texte3',type="text" , placeholder="Type answer3"/>
+<label>Question 4 :</label> 
+<input name='texte4',type="text" , placeholder="Type answer4"/>
+<label>Question 5 :</label> 
+<input name='texte5',type="text" , placeholder="Type answer5"/>
+<label></label> 
+<button>Submit</button>
+</form>
+<div id="result">
+</div>
+<script>
+    const form = document.querySelector('form');
+    const div = document.getElementById('result');
+    var Show = "";
+    var Showing = [];
+   const print_tree =(root,Show) =>{
+    if(root == null){
+        
+      return Show;  
+    }
+    
+    else{ 
+          Show =Show.concat(' < node > : '+root.name);
+          print_tree(root.left_son,Show);
+          print_tree(root.right_son,Show);
+  
+        
+    }
+    }
+
+    form.addEventListener('submit' ,async (e) =>{
+        e.preventDefault();
+const text1 = form.texte1.value;
+const text2 = form.texte2.value;
+const text3 = form.texte3.value;
+const text4 = form.texte4.value;
+const text5 = form.texte5.value;
+   await fetch('/search',{
+               method:'POST',
+                body: JSON.stringify({text1,text2,text3,text4,text5}),
+                headers: {'Content-Type' :'application/json'}}
+    ).then(async (data) =>{
+        await data.json().
+        then(data =>{
+            document.getElementById("result").innerHTML = `
+            <h1>Submitted Data</h1>
+            <p>annswer 1 : ${data.text.text1}</p>
+            <p>annswer 2 : ${data.text.text2}</p>
+            <p>annswer 3 : ${data.text.text3}</p>
+            <p>annswer 1 : ${data.text.text1}</p>
+            <p>annswer 1 : ${data.text.text1}</p>
+          `;
+    })
+       
+    }
+
+    ).catch(err=>console.log('error =  ',err))
+    } )
+    
+</script>
+ </body>   
+</html>
